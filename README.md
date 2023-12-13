@@ -89,3 +89,22 @@ mvn spring-boot:run
 
 2. Ejecutar de nuevo el proyecto (con `mvn spring-boot:run`) y acceder con un navegador a la URL http://localhost:8080/swagger-ui.html para ver la documentación autogenerada para el API REST.
 
+
+
+## Añadidos (13/12/2023) 
+
+Añadida una versión del API REST usando Spring HATEOAS (https://docs.spring.io/spring-hateoas/docs/current/reference/html/) 
+
+* Añadida al `pom.xml` del proyecto la dependencia `spring-boot-starter-hateoas` (ofrece `EntityModel`, `Link`, etc)  
+* Añadido el paquete `controladores.hateoas` con las implementaciones de los endpoint HATEOAS disponibles en las URL bajo `http://localhost:8080/api/v2`. 
+* Añadidos en ese paquete las versiones modificadas de los controladores: `AlmacenControllerV2.java`, `ArticuloControllerV2.java`,  `ClienteControllerV2.java`, `FamiliaControllerV2.java`, `PedidoControllerV2.java` 
+     - Todos ellos replican los endpoints de la versión anterior, devolviendo objetos `EntityModel<Entidad>` en lugar de devolver directamente las entidades correspondientes. 
+     - Estos `EntityModel<Entidad>` funcionan como especia de DTOs (_Data Transfer Objects_) encapsulando la/las entidad/entidades devueltas y añadiéndolo mediante objetos `Link` hipernelaces a otros re
+     cursos/entidades relacionados. 
+     - En el ejemplo no se usan hiperenlaces HATEOAS al 100%, limitandose a vincularlo a las entidades simples. En el caso de colecciones no se usa `CollectionModel` sino que se devuelven directamente listas de `EntityModel<E>` 
+
+Añadido un ejemplo de documentación de APIs REST usando _SpringDOC OpenAPI_ (https://springdoc.org/ y https://www.openapis.org/) 
+* Añadida al `pom.xml` del proyecto la dependencia `springdoc-openapi-ui`  
+* Añadidas en `ClienteControllerV2.java` (y parcialmente en  `AlmacenControllerV2.java`) las anotaciones para vincular metadatos y generar la documentación automática de los _endpoints_. 
+* La documentación on-line generada y el interfaz de pruebas _SwaggerUI_ estará disponible en http://localhost:8080/swagger-ui.html   
+* La definición OpenAPI 3.x de los _endpoints_ definidos estará disponible en http://localhost:8080/v3/api-docs (formato JSON) y en http://localhost:8080/v3/api-docs.yml (formato YAML,ver https://spec. openapis.org/oas/latest.html, editable en https://editor.swagger.io/)
